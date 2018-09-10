@@ -62,6 +62,7 @@ public class TypingRunner : SerializedMonoBehaviour
     {
         ObstacleObject newObject = Instantiate(obstaclePrefab, obstacleSpawnPoint.position, Quaternion.identity).GetComponent<ObstacleObject>();
         newObject.Init(obstacleDataList[index], obstacleSpawnPoint.position, obstacleDestinationPoint.position, PREVIEW_STEPS);
+        newObject.PlayerSucceeded += SucceedObstacle;
         newObject.PlayerFailed += RestartGame;
         obstacleObjList.Add(newObject);
 
@@ -73,10 +74,14 @@ public class TypingRunner : SerializedMonoBehaviour
         Debug.Log("IMPLEMENT ENDGAME / RESTART GAME");
     }
 
-    private void SucceedObstacle()
+    private void SucceedObstacle(ObstacleObject obstacleObj)
     {
-        // clear this obstacle
-        // print "Conquered %(obstacleString)"
+        obstacleObjList.Remove(obstacleObj);
+        UnityUtil.DestroyWithChildren(obstacleObj.transform);
+
+        if (obstacleObjList.Count == 0 && obstacleIndex == obstacleDataList.Count) {
+            Debug.Log("IMPLEMENT ENDGAME / WIN GAME");
+        }
     }
 }
 

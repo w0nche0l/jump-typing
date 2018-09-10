@@ -9,7 +9,7 @@ public class ObstacleObject : MonoBehaviour {
     private float startSteps, endSteps;
     private Vector3 startPos, endPos;
 
-    public event Action PlayerSucceeded;
+    public event Action<ObstacleObject> PlayerSucceeded;
     public event Action PlayerFailed;
     private TypingInput typingInput;
 
@@ -56,36 +56,10 @@ public class ObstacleObject : MonoBehaviour {
 
     void OnTypingInput(string textInput)
     {
-        //if collider .touches (player) {
-        //    do some checks
-        //} else
-        //{
-        //    ignore completely
-        //}
+        if (textInput == selfData.word)
+        {
+            PlayerSucceeded?.Invoke(this);
+        } 
     }
 }
 
-//// SOME OTHER ObstacleObj.py file
-
-
-//private void run()
-//{
-
-//    if (self.position.x < playerObj.position.x)
-//    {
-//        Fail("Obstacle passed you");
-//    }
-
-//    if (thingWeMadeEarlier.enter) {// this could be a callback function? maybe? i'm shit at this sryyy
-//        if (thingWeMadeEarlier.text != desiredWord)
-//        {
-//            Fail("Fought bostacle the wrong way");
-//        } else if (currTime != ) // ???? ok this is where things get really squirrely? idk how to deal with time at all
-//        {
-//            Fail("Too early :O")
-//        } else
-//        {
-//            SucceedObstacle();
-//        }
-//    }
-//}
