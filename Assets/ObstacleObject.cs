@@ -59,7 +59,7 @@ public class ObstacleObject : MonoBehaviour {
         if (textInput.ToUpper() == selfData.word.ToUpper())
         {
             PlayerSucceeded?.Invoke(this);
-        } 
+        }
     }
 }
 
