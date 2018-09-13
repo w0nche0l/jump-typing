@@ -56,7 +56,7 @@ public class ObstacleObject : MonoBehaviour {
 
     void OnTypingInput(string textInput)
     {
-        if (textInput == selfData.word)
+        if (textInput.ToUpper() == selfData.word.ToUpper())
         {
             PlayerSucceeded?.Invoke(this);
         } 
