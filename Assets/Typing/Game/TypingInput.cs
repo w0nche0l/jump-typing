@@ -8,10 +8,13 @@ using System;
 public class TypingInput : MonoBehaviour {
 
     public TMP_InputField inputField;
-    public event Action<string> OnEnter;
+    public event Action<string> OnEnter; 
+    
+    // for text highlighting
+    public event Action<string> OnKeyHit;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         Focus();
 	}
 
@@ -25,9 +28,14 @@ public class TypingInput : MonoBehaviour {
         }
     }
 
+    // for text highlighting
+    public void OnType()
+    {
+        OnKeyHit?.Invoke(inputField.text);
+    }
+
     public void OnEndEdit()
     {
-        Debug.Log("ENTERED: " + inputField.text);
         OnEnter?.Invoke(inputField.text);
         Focus();
     }

@@ -28,6 +28,20 @@ public class ObstacleObject : MonoBehaviour {
         bodyCollider._OnTriggerEnter += (Collider c) => { PlayerFailed?.Invoke(); };
         frontCollider._OnTriggerEnter += RegisterPlayer;
         frontCollider._OnTriggerExit += DeregisterPlayer;
+
+        // for text highlighting
+        if (PlayerObject.instance != null)
+        {
+            PlayerObject.instance.typingInput.OnKeyHit += OnTypingInputKeyHit;
+        }
+    }
+
+    public void OnDestroy()
+    {
+        if (PlayerObject.instance != null)
+        {
+            PlayerObject.instance.typingInput.OnKeyHit -= OnTypingInputKeyHit;
+        }
     }
 
     public void RunnerUpdate (float currSteps) {
@@ -40,7 +54,7 @@ public class ObstacleObject : MonoBehaviour {
         if (collider.tag == "Player")
         {
             PlayerObject playerObj = collider.GetComponent<PlayerObject>();
-            playerObj.typingInput.OnEnter += OnTypingInput;
+            playerObj.typingInput.OnEnter += OnTypingInputEnter;
         }
     }
 
@@ -49,12 +63,34 @@ public class ObstacleObject : MonoBehaviour {
         if (collider.tag == "Player")
         {
             PlayerObject playerObj = collider.GetComponent<PlayerObject>();
-            playerObj.typingInput.OnEnter -= OnTypingInput;
+            playerObj.typingInput.OnEnter -= OnTypingInputEnter;
         }
     }
 
+    // for text highlighting
+    int findHighlightIndex(string textInput)
+    {
+        for (int i = textInput.Length; i > 0; i--)
+        {
+            if (i <= selfData.word.Length && 
+                textInput.Substring(0, i).ToUpper() == selfData.word.Substring(0, i).ToUpper())
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
 
-    void OnTypingInput(string textInput)
+    // for text highlighting
+    void OnTypingInputKeyHit(string textInput)
+    {
+        string openTag = "<color=\"orange\">";
+        string closeTag = "</color>";
+        int i = findHighlightIndex(textInput);
+        nameTextMesh.text = openTag + selfData.word.Substring(0, i) + closeTag + selfData.word.Substring(i);
+    }
+
+    void OnTypingInputEnter(string textInput)
     {
         if (textInput.ToUpper() == selfData.word.ToUpper())
         {
